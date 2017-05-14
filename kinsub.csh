@@ -10,7 +10,7 @@
 # you want to run.
 #
 # set the name of the job
-#PBS -N 40k_domain
+#PBS -N 40k_b
 #
 # set the output and error files
 #PBS -o /data/navah/benchmarks17/mOutG.txt
@@ -72,8 +72,8 @@ set PARAM_F_POR = '6e-4'
 
 
 
-set PARAM_PATH='/data/navah/benchmarks17/output/40k_domain/'
-set PARAM_ISO_PATH='/data/navah/benchmarks17/output/40k_domain/'
+set PARAM_PATH='/data/navah/benchmarks17/output/40k_b/'
+set PARAM_ISO_PATH='/data/navah/benchmarks17/output/40k_b/'
 
  
 echo $PARAM_PATH

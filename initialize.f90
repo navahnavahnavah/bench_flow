@@ -944,8 +944,12 @@ function h_bc(h_in)
 	real(4) :: h_in(xn,yn), h_bc(xn,yn), rip_lith_y(xn)
 	integer :: p, pp
 	
-	do p = 1,xn
+	do p = 1,xn/2
 	rip_lith_y(p) = .55 - 0.00035*p
+	end do
+	
+	do p = xn/2,xn
+	rip_lith_y(p) = .55 - 0.00035*(xn/2) - 0.000175*(p - xn/2)
 	end do
 ! 	rip_lith_y = (/0.602087135445, &
 ! & 0.60116684559, 0.600246555734, 0.599326265879, 0.598405976024, 0.597485686169, 0.596565396314, &
