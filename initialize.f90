@@ -4,7 +4,7 @@ use globals
 implicit none
 
 save
- 
+
 integer :: g, gg, f, ff, long, longP, maskBit
 real(4) :: x(xn), y(yn), t(tn)
 real(4) :: rho0(xn,yn)
@@ -76,7 +76,7 @@ contains
 ! SUBROUTINE TO INITIALIZE, JUST CALL IT
 !
 ! ----------------------------------------------------------------------------------%%
-  
+
 subroutine init ()
 use globals
 integer :: m,n
@@ -153,19 +153,19 @@ read (param_f_por_string, *) param_f_por
 permf = param_f_dx*param_f_dx/3.0
 
 ! SET UP THINGS THAT CAN'T BE DONE IN THE MODULE FOR WHATEVER REASON
-dx = ( x_max - x_min ) / real ( xn - 1, kind = 4 ) 
+dx = ( x_max - x_min ) / real ( xn - 1, kind = 4 )
 x = linspace ( xn, x_min,x_max )
-dy = ( y_max - y_min ) / real ( yn - 1, kind = 4 ) 
+dy = ( y_max - y_min ) / real ( yn - 1, kind = 4 )
 y = linspace ( yn, y_min, y_max )
-dt = ( t_max - t_min ) / real ( tn - 1, kind = 4 ) 
+dt = ( t_max - t_min ) / real ( tn - 1, kind = 4 )
 t = linspace ( tn, t_min, t_max)
 
 
 
-  
+
 ! SCALE TO RESOLUTION
 
-  
+
 ! BOUNDARY CONDITIONS
 ic0(:,:) = 273.16 ! IC
 bcx0(:,1) = 273.16 ! bottom
@@ -256,7 +256,7 @@ solute(:,:,15) = 0.0 ! CO3-2
 ! solute(:,:,15) = 0.0 ! CO3-2
 
 ! seawater solute concentrations [mol/kgw]
-soluteOcean = (/ solute(1,1,1), solute(1,1,2), solute(1,1,3), solute(1,1,4), solute(1,1,5), & 
+soluteOcean = (/ solute(1,1,1), solute(1,1,2), solute(1,1,3), solute(1,1,4), solute(1,1,5), &
 			  & solute(1,1,6), solute(1,1,7), solute(1,1,8), solute(1,1,9), solute(1,1,10), &
 			  & solute(1,1,11), solute(1,1,12), solute(1,1,13), solute(1,1,14), solute(1,1,15) /)
 
@@ -522,7 +522,7 @@ sed2(1:param_w/dx) = sed2((param_w/dx)+1)
 
 !sed = sum(sed)/xn
 !sed = -100.0
- 
+
 if (param_o_rhs .gt. param_o) then
 	sed = sed-(param_o_rhs)
 end if
@@ -545,10 +545,10 @@ do g=1,xn
 	if ((y(gg) .ge. sed1(g)) .and. (x(g) .gt. edge) .and. (x(g) .lt. edge2)) then
 		 !lambdaMat(g,gg) = 1.2/((sed2(g))/(maxval(sed2)))
 		 lambdaMat(g,gg) = 1.2!*(sum(sed2)/(xn*sed2(g)))
-		 
+
 		 !lambdaMat(g,gg) = (sed2(g)/minval(sed2))*(sed2(g)/minval(sed2))*100.0*1.2*(sum(sed1)/xn)/(sed2(g)*(sed2(g)-sed1(g)))
 		 !lambdaMat(g,gg) = 1.2*sed2(g)*xn/sum(sed2)
-		 
+
 		!lambdaMat(g,gg) = 1.2/((sed(g)-sed1(g))/(minval(sed-sed1)))
 
 	end if
@@ -559,7 +559,7 @@ end do
 ! with sediment cap
 sed3 = sed1 - (param_h)
 
-	
+
 
 	! the mask
 	mask = 1.0
@@ -587,7 +587,7 @@ sed3 = sed1 - (param_h)
 					mask(g,yn-0:yn) = 0.0
 				end if
 			end if
-		
+
 ! 			! right outcrop top
 ! 			if ((x(g) .gt. edge2)) then
 ! 				if (param_o_rhs .gt. param_o) then
@@ -624,25 +624,25 @@ sed3 = sed1 - (param_h)
 		end if
 	end do
 	end do
-	
+
 	do gg=2,yn-1
 	do g =2,xn-1
 		! left upper corner
 		if ((mask(g,gg) .eq. 25.0) .and. (mask(g+1,gg-1) .eq. 5.0)) then
 			mask(g+1,gg) = 12.5
 		end if
-		
+
 		! right upper corner
 		if ((mask(g,gg) .eq. 25.0) .and. (mask(g-1,gg-1) .eq. 10.0)) then
 			mask(g-1,gg) = 17.5
 		end if
-		
+
 	end do
 	end do
-		
-		
+
+
 	do gg=2,yn-1
-	do g =2,xn-1 
+	do g =2,xn-1
 		! left bottom corner
 		if ((mask(g,gg) .eq. 5.0) .and. (mask(g+1,gg-1) .eq. 50.0)) then
 			mask(g,gg-1) = 2.5
@@ -651,7 +651,7 @@ sed3 = sed1 - (param_h)
 ! 			mask(g,gg) = 1.0
 ! 			mask(g+1,gg-1) = 1.0
 		end if
-		
+
 		! right bottom corner
 		if ((mask(g,gg) .eq. 10.0) .and. (mask(g-1,gg-1) .eq. 50.0)) then
 			mask(g,gg-1) = 7.5
@@ -662,12 +662,12 @@ sed3 = sed1 - (param_h)
 		end if
 	end do
 	end do
-	
 
 
-	
 
-	
+
+
+
 	maskP = mask
 
 	do gg=1,yn-1
@@ -678,7 +678,7 @@ sed3 = sed1 - (param_h)
 
 	end do
 	end do
-	
+
 	do gg=2,yn-3
 	do g =1,xn
 
@@ -694,8 +694,8 @@ end if
 
 	end do
 	end do
-	
-	
+
+
 	do gg=2,yn-3
 	do g =1,xn
 
@@ -705,12 +705,12 @@ end if
 
 	end do
 	end do
-	
-	
 
-	
-	
-	
+
+
+
+
+
 	do gg=1,yn
 	do g =1,xn
 
@@ -721,9 +721,9 @@ end if
 
 	end do
 	end do
-	
-	
-	
+
+
+
 
 	fives = 1.0
 	tens = 1.0
@@ -735,29 +735,29 @@ end if
 				fives(1,gg) = g
 				fives(2,gg) = gg
 			end if
-			
+
 			if ((maskP(g,gg) .eq. 10.0) .or. (maskP(g,gg) .eq. 17.5)) then
 				tens(1,gg) = g
 				tens(2,gg) = gg
 			end if
 		end do
 		end do
-		
-	
+
+
 		do g=1,xn
 		do gg=1,yn
 			if ((maskP(g,gg) .eq. 25.0) .or. (maskP(g,gg) .eq. 12.5) .or. (maskP(g,gg) .eq. 17.5)) then
 				twentyfives(1,g) = g
 				twentyfives(2,g) = gg
 			end if
-			
+
 			if (maskP(g,gg) .eq. 50.0) then
 				fifties(1,g) = g
 				fifties(2,g) = gg
 			end if
 		end do
 		end do
-	
+
 		write(*,*) "fives"
 		write(*,*) fives
 
@@ -771,25 +771,25 @@ end if
 			primary(g:g,gg:gg+1,5) = 0.0 ! NO BASALT IN SEDIMENT DUH
 			medium(g-1:g+1,gg:gg+1,5) = 0.0 ! NO REACTIONS IN SEDIMENT
 		end if
- 
+
 
 		if ((y(gg) .le. sed3(g))) then
 			permeability(g,gg) = 1e-16
 			medium(g,gg,5) = 0.0 ! NO REACTIONS IN DIKES
 		end if
-		
+
 		if ((x(g) .le. param_w) .or. (x(g) .ge. x_max-param_w_rhs)) then
 			medium(g,gg,5) = 0.0 ! NO REACTIONS IN OUTCROPS
 		end if
-		
+
 		if (g .gt. f_index1 - 1) then
 			medium(g,gg,5) = 0.0 ! NO REACTIONS PAST FRACTURE
 		end if
 
 	end do
 	end do
-	
-	
+
+
 	! 369 fracture goes HERE
 	do gg=2,yn-3
 	do g =1,xn
@@ -798,7 +798,7 @@ end if
 			maskP(g,gg) = 6.0
 			maskP(g-1,gg) = 3.0
 ! 			maskP(g+1,gg) = 9.0
-			
+
 			mask(g,gg) = 6.0
 			mask(g-1,gg) = 3.0
 ! 			mask(g+1,gg) = 9.0
@@ -808,10 +808,10 @@ end if
 
 			!permeability(g-1:g,gg) = param_paq
 		end if
-		
+
 		!if ((maskP(g,gg) .eq. 100.0) .and. (g .eq. f_index1) .and. (y(gg) .ge. sed1(g))) then
 		if ((maskP(g,gg-1) .eq. 1.0) .and. (maskP(g,gg) .eq. 6.0)) then
-			
+
 			maskP(g,code) = 6.01
 			maskP(g,code+1:gg-1) = 6.05
 			maskP(g,gg-1) = 6.1
@@ -819,7 +819,7 @@ end if
 			maskP(g-1,code+1:gg-1) = 3.05
 			maskP(g-1,gg-1) = 3.1
 ! 			maskP(g+1,gg) = 9.0
-			
+
 			mask(g,2:gg-1) = 6.05
 			!permeability(g,2:gg-1) = 1e-18
 			mask(g,gg-1) = 6.1
@@ -833,25 +833,25 @@ end if
 
 			!permeability(g-1:g,gg) = param_paq
 		end if
-		
+
 		if ((maskP(g,gg) .eq. 50.0) .and. (g .eq. f_index1) .and. (y(gg) .ge. sed1(g))) then
 			maskP(g,gg) = 6.5
 			maskP(g-1,gg) = 3.5
 ! 			maskP(g+1,gg) = 9.0
-			
+
 			mask(g,gg) = 6.5
 			mask(g-1,gg) = 3.5
 ! 			mask(g+1,gg) = 9.0
 
 !  			lambdaMat(g,gg:gg+1) = 6.0
 !  			lambdaMat(g-1,gg:gg+1) = 6.0
-			
+
 			!permeability(g-1:g,gg:) = param_paq
 		end if
 
 	end do
 	end do
-	
+
 ! 	do gg=1,yn
 ! 	do g=2,xn-1
 ! 		if ((g .eq. 6) .and. (y(gg) .gt. sed3(g)+dy+dy)) then
@@ -881,7 +881,7 @@ end if
 ! 	end do
 ! 	end do
 
-	
+
 	! high lambda in deep basalt
 	do gg=1,yn
 	do g=1,xn
@@ -890,7 +890,7 @@ end if
 		end if
 	end do
 	end do
-	
+
 
 	active_cells = 0
 	do gg=1,yn
@@ -904,7 +904,7 @@ end if
 
 	long = (xn-2)*(yn-2)
 	longP = (xn-2)*((yn/2)-2)
-	
+
 ! 	! SINGLE FRACTURE BOX
 ! 	mask = 1.0
 ! 	mask(21,yn/2+5:) = 6.0
@@ -920,13 +920,13 @@ end if
 
 	maskLong = reshape(mask(2:xn-1,2:yn-1), (/long/))
 	maskLongT = reshape(transpose(mask(2:xn-1,2:yn-1)), (/long/))
-	
+
 	maskLongU = reshape(mask(2:xn-1,1:yn), (/(xn-2)*(yn-0)/))
 	maskLongTV = reshape(transpose(mask(1:xn,2:yn-1)), (/(xn-0)*(yn-2)/))
-	
+
 	maskPLong = reshape(maskP(2:xn-1,(yn/2)+2:yn-1), (/longP/))
 	maskPLongT = reshape(transpose(maskP(2:xn-1,(yn/2)+2:yn-1)), (/longP/))
-	
+
 
 
 return
@@ -939,17 +939,17 @@ end subroutine init
 
 
 function h_bc(h_in)
-	
+
 	use globals
 	real(4) :: h_in(xn,yn), h_bc(xn,yn), rip_lith_y(xn)
 	integer :: p, pp
-	
-	do p = 1,xn/2
+
+	do p = 1,xn/4
 	rip_lith_y(p) = .55 - 0.00035*p
 	end do
-	
+
 	do p = xn/2,xn
-	rip_lith_y(p) = .55 - 0.00035*(xn/2) - 0.000175*(p - xn/2)
+	rip_lith_y(p) = .55 - 0.00035*(xn/4) - 0.000175*(p - xn/4)
 	end do
 ! 	rip_lith_y = (/0.602087135445, &
 ! & 0.60116684559, 0.600246555734, 0.599326265879, 0.598405976024, 0.597485686169, 0.596565396314, &
@@ -1049,10 +1049,10 @@ function h_bc(h_in)
 ! & 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787, &
 ! & 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787, &
 ! & 0.38027111787, 0.38027111787, 0.38027111787, 0.38027111787/)
-	
-	h_bc = h_in 
-	
-	
+
+	h_bc = h_in
+
+
 	! top of outcrops
 	do pp=1,yn
 	do p=1,xn
@@ -1067,16 +1067,16 @@ function h_bc(h_in)
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!    VERTICAL OUTER   !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		
-	do pp=1,yn	
+
+	do pp=1,yn
 		if (mask(xn,pp) .ne. 0.0) then
 			h_bc(xn,pp) = (4.0/3.0)*h_in(xn-1,pp) - (1.0/3.0)*h_in(xn-2,pp) ! right
 		end if
 	end do
-	
-	do pp=1,yn	
+
+	do pp=1,yn
 		if (mask(1,pp) .ne. 0.0) then
-			h_bc(1,pp) = (4.0/3.0)*h_in(2,pp) - (1.0/3.0)*h_in(3,pp) ! left 
+			h_bc(1,pp) = (4.0/3.0)*h_in(2,pp) - (1.0/3.0)*h_in(3,pp) ! left
 		end if
 	end do
 
@@ -1084,18 +1084,18 @@ function h_bc(h_in)
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!   HORIZONTAL OUTER  !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	 
+
 	! bottom
 	do p = 1,xn
 		!h_bc(p,1) = h_in(p,2) + ( .48) * dy/2.0
 		h_bc(p,1) = h_in(p,2) + ( rip_lith_y(p)) * dy/1.8
 	end do
-	
+
 	! two lines recent...
 	 	h_bc(xn,1) = h_bc(xn,2)
 	 	h_bc(1,1) = h_bc(1,2)
 
-	
+
 	! top of outcrops
 	do p=1,xn
  	do pp=2,yn-1
@@ -1133,11 +1133,11 @@ function h_bc(h_in)
 	end do
 	end do
 
-	
+
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!    VERTICAL INNER   !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	
+
 	do p=2,xn-1
  	do pp=2,yn
 
@@ -1145,7 +1145,7 @@ function h_bc(h_in)
 		if ((mask(p,pp) .eq. 12.5)) then
 			h_bc(p+1,pp) = param_tsw
 		end if
-		
+
 		if ((mask(p,pp) .eq. 5.0)) then
 			h_bc(p+1,pp) = param_tsw
 		end if
@@ -1154,16 +1154,16 @@ function h_bc(h_in)
 		if ((mask(p,pp) .eq. 17.5)) then
 			h_bc(p-1,pp) = param_tsw
 		end if
-		
+
 		if ((mask(p,pp) .eq. 10.0)) then
 			h_bc(p-1,pp) = param_tsw
 		end if
 
 	end do
 	end do
-	
-	
-	
+
+
+
 ! 	do p=2,xn-1
 !  	do pp=2,yn
 !
@@ -1179,13 +1179,13 @@ function h_bc(h_in)
 !
 ! 	end do
 ! 	end do
-	
+
 ! 	!optimized
 ! 	h_bc(fives(:,1)+1,fives(:,2)) = param_tsw
 ! 	h_bc(tens(:,1)-1,tens(:,2)) = param_tsw
 ! 	h_bc(twelve(1,1)+1,twelve(1,2)) = param_tsw
 ! 	h_bc(seventeen(1,1)-1,seventeen(1,2)) = param_tsw
-	
+
 ! 	!!!! ACTUAL CORNERS
 ! 	do i=2,xn-1
 ! 		do ii=1,yn
@@ -1217,7 +1217,7 @@ function h_bc(h_in)
 ! 		end if
 ! 	end do
 ! 	end do
-		
+
 return
 end function h_bc
 
@@ -1231,15 +1231,15 @@ end function h_bc
 
 
 function psi_bc(psi_in)
-	
+
 	use globals
 	real(4) :: psi_in(xn,yn), psi_bc(xn,yn)
 	integer :: p,pp
-	
+
 	psi_bc = psi_in
-	
-	
-	
+
+
+
 	do pp=1,yn
     do p=1,xn
 		if ((maskP(p,pp) .eq. 0.0)) then
@@ -1248,7 +1248,7 @@ function psi_bc(psi_in)
 	end do
 	end do
 
-	
+
     do p=1,xn
     	do pp=2,yn-1
 
@@ -1259,9 +1259,9 @@ function psi_bc(psi_in)
 
     	end do
     end do
-	
-	
-	
+
+
+
 	do pp=1,yn
 		! left
 		if (maskP(1,pp) .ne. 0.0) then
@@ -1272,9 +1272,9 @@ function psi_bc(psi_in)
 			psi_bc(xn,pp) =0.0
 		end if
 	end do
-	
+
 	! 12/09
-	
+
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!   HORIZONTAL OUTER  !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1283,26 +1283,26 @@ function psi_bc(psi_in)
 			if ((maskP(p,pp) .eq. 100.0) .or. (maskP(p,pp) .eq. 3.01) .or. (maskP(p,pp) .eq. 6.01)) then
 				psi_bc(p,pp-1) = 0.0
 			end if
-	
+
 		end do
 	end do
 
 
 
 
-	
+
 
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!   HORIZONTAL INNER  !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	
 
-	
+
+
 
 	do p=2,xn-1
 		do pp=2,yn-1
 
-		
+
 				! right outcrop (left boundary)
 				if ((maskP(p,pp) .eq. 10.0)) then
 					psi_bc(p-1,pp) = (4.0/3.0)*psi_in(p,pp) - (1.0/3.0)*psi_in(p+1,pp)
@@ -1320,10 +1320,10 @@ function psi_bc(psi_in)
 				if ((maskP(p,pp) .eq. 12.5)) then
 					psi_bc(p+1,pp) = (4.0/3.0)*psi_in(p,pp) - (1.0/3.0)*psi_in(p-1,pp)
 				end if
- 
+
 		end do
 	end do
-	
+
 	do p=2,xn
 		do pp=2,yn-1
 
@@ -1335,9 +1335,9 @@ function psi_bc(psi_in)
 
 
 		end do
-	end do		
-	
-	
+	end do
+
+
 ! 	do p=2,xn
 ! 		do pp=2,yn-1
 !
@@ -1350,7 +1350,7 @@ function psi_bc(psi_in)
 !
 ! 		end do
 ! 	end do
-	
+
 	! SUSTAINED
 
 ! 	do p=1,xn
@@ -1385,7 +1385,7 @@ function psi_bc(psi_in)
 ! 	end do
 !
 	psi_bc(f_index1,:) = 0.0
-	
+
 
 ! ! SINGLE FRACTURE BOX
 ! psi_bc(1,:) = 0.0
@@ -1405,7 +1405,7 @@ function psi_bc(psi_in)
 ! 		end if
 !
 ! 	end do
-! end do	
+! end do
 
 
 
@@ -1425,15 +1425,15 @@ end function psi_bc
 
 
 function psi_siphon(psi_in)
-	
+
 	use globals
 	real(4) :: psi_in(xn,yn), psi_siphon(xn,yn)
 	integer :: p,pp
-	
+
 	psi_siphon = psi_in
-	
-	
-	
+
+
+
 	do pp=1,yn
     do p=1,xn
 		if ((maskP(p,pp) .eq. 0.0)) then
@@ -1442,7 +1442,7 @@ function psi_siphon(psi_in)
 	end do
 	end do
 
-	
+
  do p=1,xn
     	do pp=2,yn-1
 
@@ -1490,10 +1490,10 @@ function psi_siphon(psi_in)
 !
 ! 		end do
 ! 	end do
-	
-	
-	
-	
+
+
+
+
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!    VERTICAL OUTER   !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1508,13 +1508,13 @@ function psi_siphon(psi_in)
 			!psi_siphon(xn,pp+1) = -dx*scope*x_max + dx*scope*(x_max-param_w)
 		end if
 	end do
-	
+
 	! 12/09
-	
-	
 
 
-	
+
+
+
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!   HORIZONTAL OUTER  !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1523,14 +1523,14 @@ function psi_siphon(psi_in)
 			if ((maskP(p,pp) .eq. 100.0) .or. (maskP(p,pp) .eq. 6.1) .or. (maskP(p,pp) .eq. 3.1)) then
 				psi_siphon(p,pp-1) = 0.0!dx*scope*0.0 - dx*scope*param_w
 			end if
-	
+
 		end do
 	end do
 
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	!!!!!   HORIZONTAL INNER  !!!!!
 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	
+
 ! 	! find bottom 5 and 10
 ! 	do p=2,xn-1
 ! 		do pp=2,yn-1
@@ -1543,8 +1543,8 @@ function psi_siphon(psi_in)
 ! 		end do
 ! 	end do
 
-	
-	
+
+
 ! 	do p=2,xn-1
 ! 		do pp=2,yn-1
 !
@@ -1599,7 +1599,7 @@ function psi_siphon(psi_in)
 
 
 
-	
+
 	do p=2,xn-1
 		do pp=2,yn-1
 
@@ -1617,7 +1617,7 @@ function psi_siphon(psi_in)
 ! 			end if
 
 		end do
-	end do		
+	end do
 
 ! !!!! ACTUAL CORNERS
 ! do pp=2,yn
@@ -1658,13 +1658,13 @@ end function psi_siphon
 
 
 function psi_mod(psi_in)
-	
+
 	use globals
 	real(4) :: psi_in(xn,yn), psi_mod(xn,yn)
 	integer :: p,pp
-	
+
 	psi_mod = psi_in
-	
+
 	do pp=1,yn
     do p=1,xn
 		if (mask(p,pp) .eq. 0.0) then
@@ -1672,7 +1672,7 @@ function psi_mod(psi_in)
 		end if
 	end do
 	end do
-	
+
 
 
 

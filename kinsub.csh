@@ -10,7 +10,7 @@
 # you want to run.
 #
 # set the name of the job
-#PBS -N 40k_b
+#PBS -N 90k_b
 #
 # set the output and error files
 #PBS -o /data/navah/benchmarks17/mOutG.txt
@@ -33,13 +33,13 @@
 #
 # bring in the module settings
 
-sleep 10s 
+sleep 10s
 source /etc/profile.d/modules.csh
 module load intel/intel-12
 module load mpi/mvapich2/intel
 
-  
- 
+
+
 
 # model parameters go here i guess
 set PARAM_O='100'
@@ -58,7 +58,7 @@ set PARAM_TRACE='0'
 
 set PARAM_CH='600'
 
-set PARAM_PAQ = '1e-12' 
+set PARAM_PAQ = '1e-12'
 
 set PARAM_CH_RHS = '600'
 
@@ -67,26 +67,26 @@ set PARAM_F_DX = '-1.6'
 set PARAM_F_K = '1e-5'
 #set PARAM_F_FREQ = '0.0005'
 set PARAM_F_FREQ = '20'
-set PARAM_F_POR = '6e-4' 
- 
+set PARAM_F_POR = '6e-4'
 
 
 
-set PARAM_PATH='/data/navah/benchmarks17/output/40k_b/'
-set PARAM_ISO_PATH='/data/navah/benchmarks17/output/40k_b/'
 
- 
+set PARAM_PATH='/data/navah/benchmarks17/output/summer_90k/06_19_90k/'
+set PARAM_ISO_PATH='/data/navah/benchmarks17/output/summer_90k/06_19_90k/'
+
+
 echo $PARAM_PATH
 # set PROGNAME to the name of your program
 set PROGNAME=massacr
- 
+
 # figure out which mpiexec to use
 set LAUNCH=/usr/mpi/intel/openmpi-1.4.3-qlc/bin/mpirun
- 
+
 # working directory
 set WORKDIR=${HOME}
 set WORKDIR=/data/navah/benchmarks17
- 
+
 set NCPU=`wc -l < $PBS_NODEFILE`
 set NNODES=`uniq $PBS_NODEFILE | wc -l`
 # set this to zero to turn OFF debugging, 1 to turn it on
@@ -94,7 +94,7 @@ set PERMDIR=${HOME}
 set SERVPERMDIR=${PBS_O_HOST}:${PERMDIR}
 
 set DEBUG=1
-if ( $DEBUG ) then 
+if ( $DEBUG ) then
 	echo ------------------------------------------------------
 	echo ' This job is allocated on '${NCPU}' cpu(s)'
 	echo 'Job is running on node(s): '
