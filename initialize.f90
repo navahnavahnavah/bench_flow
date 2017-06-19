@@ -948,7 +948,7 @@ function h_bc(h_in)
 	rip_lith_y(p) = .55 - 0.00035*p
 	end do
 
-	do p = xn/2,xn
+	do p = xn/4,xn
 	rip_lith_y(p) = .55 - 0.00035*(xn/4) - 0.000175*(p - xn/4)
 	end do
 ! 	rip_lith_y = (/0.602087135445, &
